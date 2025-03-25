@@ -10,6 +10,8 @@ namespace Ambev.DeveloperEvaluation.Application.Users.DeleteUser;
 public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, DeleteUserResponse>
 {
     private readonly IUserRepository _userRepository;
+    private readonly IPersonRepository _personRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     /// <summary>
     /// Initializes a new instance of DeleteUserHandler
@@ -17,9 +19,14 @@ public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, DeleteUserRe
     /// <param name="userRepository">The user repository</param>
     /// <param name="validator">The validator for DeleteUserCommand</param>
     public DeleteUserHandler(
-        IUserRepository userRepository)
+        IPersonRepository personRepository,
+        IUserRepository userRepository,
+        IUnitOfWork unitOfWork
+    )
     {
+        _personRepository = personRepository;
         _userRepository = userRepository;
+        _unitOfWork = unitOfWork;   
     }
 
     /// <summary>
@@ -30,16 +37,19 @@ public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, DeleteUserRe
     /// <returns>The result of the delete operation</returns>
     public async Task<DeleteUserResponse> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        var validator = new DeleteUserValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        string message = $"User with ID {request.Id} not found";
+        var person = await _personRepository.GetByUserIdAsync(request.Id, cancellationToken) 
+            ?? throw new KeyNotFoundException(message);
 
-        if (!validationResult.IsValid)
-            throw new ValidationException(validationResult.Errors);
-
-        var success = await _userRepository.DeleteAsync(request.Id, cancellationToken);
+        var success = await _personRepository.DeleteAsync(person.Id, cancellationToken);
         if (!success)
-            throw new KeyNotFoundException($"User with ID {request.Id} not found");
+            throw new KeyNotFoundException(message);
 
+        success = await _userRepository.DeleteAsync(request.Id, cancellationToken);
+        if (!success)
+            throw new KeyNotFoundException(message);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
         return new DeleteUserResponse { Success = true };
     }
 }

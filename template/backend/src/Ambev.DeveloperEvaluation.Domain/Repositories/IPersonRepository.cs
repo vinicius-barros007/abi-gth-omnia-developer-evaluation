@@ -23,6 +23,8 @@ public interface IPersonRepository
     /// <returns>The person if found, null otherwise</returns>
     Task<Person?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
+    Task<Person?> GetByUserIdAsync(Guid id, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Deletes a person from the repository
     /// </summary>

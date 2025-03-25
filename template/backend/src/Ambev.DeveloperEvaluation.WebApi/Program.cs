@@ -54,6 +54,7 @@ public class Program
 
             var app = builder.Build();
             app.UseMiddleware<ValidationExceptionMiddleware>();
+            app.UseMiddleware<KeyNotFoundExceptionMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {
@@ -62,14 +63,11 @@ public class Program
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseBasicHealthChecks();
-
             app.MapControllers();
-
             app.Run();
         }
         catch (Exception ex)

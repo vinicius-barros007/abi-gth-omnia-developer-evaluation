@@ -43,6 +43,11 @@ public class PersonRepository : IPersonRepository
         return await _context.Set<Person>().FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
     }
 
+    public async Task<Person?> GetByUserIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Set<Person>().FirstOrDefaultAsync(o => o.UserId == id, cancellationToken);
+    }
+
     /// <summary>
     /// Deletes a person from the database
     /// </summary>

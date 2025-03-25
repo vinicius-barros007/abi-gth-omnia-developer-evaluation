@@ -102,18 +102,11 @@ public class UsersController : BaseController
     {
         var request = new DeleteUserRequest { Id = id };
         var validator = new DeleteUserRequestValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
         var command = _mapper.Map<DeleteUserCommand>(request.Id);
-        await _mediator.Send(command, cancellationToken);
 
-        return Ok(new ApiResponse
-        {
-            Success = true,
-            Message = "User deleted successfully"
-        });
+        await _mediator.Send(command, cancellationToken);
+        return Ok("User deleted successfully");
     }
 }

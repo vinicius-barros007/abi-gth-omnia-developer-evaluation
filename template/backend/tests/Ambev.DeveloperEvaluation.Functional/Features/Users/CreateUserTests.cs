@@ -67,7 +67,6 @@ namespace Ambev.DeveloperEvaluation.Functional.Features.Users
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            string res = await response.Content.ReadAsStringAsync();    
             var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
 
             content.Should().NotBeNull();
