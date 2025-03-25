@@ -2,8 +2,8 @@
 using MediatR;
 using FluentValidation;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
-using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Common.Security;
+using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
 
 namespace Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 
@@ -13,6 +13,8 @@ namespace Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserResult>
 {
     private readonly IUserRepository _userRepository;
+    private readonly IPersonRepository _personRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IPasswordHasher _passwordHasher;
 
@@ -22,9 +24,17 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
     /// <param name="userRepository">The user repository</param>
     /// <param name="mapper">The AutoMapper instance</param>
     /// <param name="validator">The validator for CreateUserCommand</param>
-    public CreateUserHandler(IUserRepository userRepository, IMapper mapper, IPasswordHasher passwordHasher)
+    public CreateUserHandler(
+        IUserRepository userRepository, 
+        IPersonRepository personRepository, 
+        IUnitOfWork unitOfWork, 
+        IMapper mapper, 
+        IPasswordHasher passwordHasher
+    )
     {
         _userRepository = userRepository;
+        _personRepository = personRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
         _passwordHasher = passwordHasher;
     }
@@ -37,12 +47,6 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
     /// <returns>The created user details</returns>
     public async Task<CreateUserResult> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
-        var validator = new CreateUserCommandValidator();
-        var validationResult = await validator.ValidateAsync(command, cancellationToken);
-
-        if (!validationResult.IsValid)
-            throw new ValidationException(validationResult.Errors);
-
         var existingUser = await _userRepository.GetByEmailAsync(command.Email, cancellationToken);
         if (existingUser != null)
             throw new InvalidOperationException($"User with email {command.Email} already exists");
@@ -51,6 +55,11 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserRe
         user.Password = _passwordHasher.HashPassword(command.Password);
 
         var createdUser = await _userRepository.CreateAsync(user, cancellationToken);
+        user.Person.UserId = createdUser.Id;    
+
+        await _personRepository.CreateAsync(user.Person, cancellationToken);  
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
         var result = _mapper.Map<CreateUserResult>(createdUser);
         return result;
     }

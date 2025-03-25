@@ -1,45 +1,52 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Common;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
+/// <summary>
+/// Represents an address value object.
+/// </summary>
+[Owned]
 public class Address : ValueObject
 {
-    public Address(
-        string street,
-        int number, 
-        string city, 
-        string state, 
-        string country, 
-        string zipCode
-    )
-    {
-        Street = street;
-        Number = number;
-        City = city;
-        State = state;
-        Country = country;
-        ZipCode = zipCode;
-    }
+    /// <summary>
+    /// Gets or sets the city of the address.
+    /// </summary>
+    public string City { get; set; } = string.Empty;
 
-    public string City { get; private set; }
+    /// <summary>
+    /// Gets or sets the street of the address.
+    /// </summary>
+    public string Street { get; set; } = string.Empty;
 
-    public string Street { get; private set; }
+    /// <summary>
+    /// Gets or sets the number of the address.
+    /// </summary>
+    public int Number { get; set; }
 
-    public int Number { get; private set; }
+    /// <summary>
+    /// Gets or sets the zip code of the address.
+    /// </summary>
+    [JsonPropertyName("zipcode")]
+    public string ZipCode { get; set; } = string.Empty;
 
-    public string ZipCode { get; private set; }
-        
-    public string State { get; private set; }
+    /// <summary>
+    /// Gets or sets the geolocation of the address.
+    /// </summary>
+    [JsonPropertyName("geolocation")]
+    public GeoLocation GeoLocation { get; set; } = default!;
 
-    public string Country { get; private set; }
-    
+    /// <summary>
+    /// Retrieves the atomic values of the address.
+    /// </summary>
+    /// <returns>An enumerable of the atomic values.</returns>
     public override IEnumerable<object> GetAtomicValues()
     {
         yield return Street;
         yield return Number;
         yield return City;
-        yield return State;
-        yield return Country;
         yield return ZipCode;
+        yield return GeoLocation;
     }
 }

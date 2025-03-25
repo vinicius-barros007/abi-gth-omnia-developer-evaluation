@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+﻿using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
 
@@ -36,4 +37,14 @@ public class CreateUserRequest
     /// Gets or sets the role assigned to the user.
     /// </summary>
     public UserRole Role { get; set; }
+
+    /// <summary>
+    /// Gets or sets the name to the user.
+    /// </summary>
+    public PersonName Name { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the name to the user.
+    /// </summary>
+    public Address Address { get; set; } = default!;
 }

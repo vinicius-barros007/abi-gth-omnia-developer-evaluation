@@ -1,5 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Enums;
-using Ambev.DeveloperEvaluation.Domain.Validation;
+﻿using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
+using Ambev.DeveloperEvaluation.Domain.Validation.Common;
 using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
@@ -23,11 +23,29 @@ public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
     /// </remarks>
     public CreateUserRequestValidator()
     {
+        RuleFor(user => user.Name.FirstName).NotEmpty().Length(2, 50);
+        RuleFor(user => user.Name.LastName).NotEmpty().Length(2, 70);
+
+        RuleFor(user => user.Address).NotNull();
+        RuleFor(user => user.Address.City).NotEmpty().MaximumLength(50);
+        RuleFor(user => user.Address.Street).NotEmpty().MaximumLength(100);
+        RuleFor(user => user.Address.Number).GreaterThan(0);
+        RuleFor(user => user.Address.ZipCode).NotEmpty().MaximumLength(10);
+
+        RuleFor(user => user.Address.GeoLocation).NotNull();
+        RuleFor(user => user.Address.GeoLocation.Latitude)
+            .InclusiveBetween(-90.0m, 90.0m)
+            .WithMessage("The latitude of the location. May range from -90.0 to 90.0.");
+
+        RuleFor(user => user.Address.GeoLocation.Longitude)
+            .InclusiveBetween(-180.0m, 180.0m)
+            .WithMessage("The longitude of the location. May range from -180.0 to 180.0.");
+
         RuleFor(user => user.Email).SetValidator(new EmailValidator());
         RuleFor(user => user.Username).NotEmpty().Length(3, 50);
         RuleFor(user => user.Password).SetValidator(new PasswordValidator());
         RuleFor(user => user.Phone).Matches(@"^\+?[1-9]\d{1,14}$");
         RuleFor(user => user.Status).NotEqual(UserStatus.Unknown);
-        RuleFor(user => user.Role).NotEqual(UserRole.None);
+        RuleFor(user => user.Role).NotEqual(UserRole.None);        
     }
 }
