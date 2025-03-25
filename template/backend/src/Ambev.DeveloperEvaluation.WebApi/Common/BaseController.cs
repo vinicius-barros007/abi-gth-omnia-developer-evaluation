@@ -14,10 +14,13 @@ public class BaseController : ControllerBase
         User.FindFirst(ClaimTypes.Email)?.Value ?? throw new NullReferenceException();
 
     protected IActionResult Ok<T>(T data) =>
-            base.Ok(new ApiResponseWithData<T> { Data = data, Success = true });
+        base.Ok(new ApiResponseWithData<T> { Data = data, Success = true });
+
+    protected IActionResult Ok<T>(string message, T data) =>
+        base.Ok(new ApiResponseWithData<T> { Data = data, Message = message, Success = true });
 
     protected IActionResult Ok(string message) =>
-            base.Ok(new ApiResponse { Message = message, Success = true });
+        base.Ok(new ApiResponse { Message = message, Success = true });
 
     protected IActionResult Created<T>(string routeName, object routeValues, T data) =>
         base.CreatedAtRoute(routeName, routeValues, new ApiResponseWithData<T> { Data = data, Success = true });

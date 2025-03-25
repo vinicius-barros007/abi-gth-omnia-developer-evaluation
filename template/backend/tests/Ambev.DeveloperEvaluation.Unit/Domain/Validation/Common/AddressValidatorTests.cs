@@ -1,5 +1,5 @@
 using Ambev.DeveloperEvaluation.Domain.Validation.Common;
-using Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
+using Ambev.DeveloperEvaluation.TestData.User;
 using FluentValidation.TestHelper;
 using Xunit;
 
@@ -24,7 +24,7 @@ public class AddressValidatorTests
     public void Given_ValidAddress_When_Validated_Then_ShouldNotHaveErrors()
     {
         // Arrange
-        var address = UserTestData.GenerateValidAddress();
+        var address = PersonTestData.GenerateValidAddress();
 
         // Act
         var result = _validator.TestValidate(address);
@@ -40,7 +40,7 @@ public class AddressValidatorTests
     public void Given_ValidAddress_And_Missing_GeoLocation_When_Validated_Then_ShouldNotHaveErrors()
     {
         // Arrange
-        var address = UserTestData.GenerateValidAddress();
+        var address = PersonTestData.GenerateValidAddress();
         address.GeoLocation = default!;
 
         // Act
@@ -57,7 +57,7 @@ public class AddressValidatorTests
     public void Given_EmptyEmail_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var address = UserTestData.GenerateValidAddress();
+        var address = PersonTestData.GenerateValidAddress();
         address.City = string.Empty;
 
         // Act
@@ -75,7 +75,7 @@ public class AddressValidatorTests
     public void Given_CityExceedMaxLength_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var address = UserTestData.GenerateInvalidAddress();
+        var address = PersonTestData.GenerateInvalidAddress();
 
         // Act
         var result = _validator.TestValidate(address);
@@ -92,7 +92,7 @@ public class AddressValidatorTests
     public void Given_EmptyStreet_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var address = UserTestData.GenerateValidAddress();
+        var address = PersonTestData.GenerateValidAddress();
         address.Street = string.Empty;
 
         // Act
@@ -110,7 +110,7 @@ public class AddressValidatorTests
     public void Given_StreetExceedMaxLength_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var address = UserTestData.GenerateInvalidAddress();
+        var address = PersonTestData.GenerateInvalidAddress();
 
         // Act
         var result = _validator.TestValidate(address);
@@ -127,7 +127,7 @@ public class AddressValidatorTests
     public void Given_NumberLowerThanZero_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var address = UserTestData.GenerateInvalidAddress();
+        var address = PersonTestData.GenerateInvalidAddress();
         address.Number = 0;
 
         // Act
@@ -145,7 +145,7 @@ public class AddressValidatorTests
     public void Given_EmptyZipCode_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var address = UserTestData.GenerateValidAddress();
+        var address = PersonTestData.GenerateValidAddress();
         address.ZipCode = string.Empty;
 
         // Act
@@ -163,7 +163,7 @@ public class AddressValidatorTests
     public void Given_ZipCodeExceedMaxLength_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var address = UserTestData.GenerateInvalidAddress();
+        var address = PersonTestData.GenerateInvalidAddress();
 
         // Act
         var result = _validator.TestValidate(address);

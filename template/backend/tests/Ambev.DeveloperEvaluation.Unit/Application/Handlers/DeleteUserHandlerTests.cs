@@ -1,15 +1,11 @@
-using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Application.Users.DeleteUser;
-using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
-using Ambev.DeveloperEvaluation.Unit.Domain;
-using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application;
+namespace Ambev.DeveloperEvaluation.Unit.Application.Handlers;
 
 public class DeleteUserHandlerTests
 {
@@ -56,7 +52,7 @@ public class DeleteUserHandlerTests
     }
 
     [Fact(DisplayName = "Given user id not mapped to user When deleting Then error is thrown")]
-    public async Task Handle_ValidRequest_HashesPassword()
+    public async Task Handle_InvalidRequest_ThrowsError()
     {
         // Given
         var command = new DeleteUserCommand(Guid.NewGuid());
@@ -69,7 +65,7 @@ public class DeleteUserHandlerTests
         var action = () => _handler.Handle(command, CancellationToken.None);
 
         // Then
-        await action.Should().ThrowAsync<KeyNotFoundException>(); 
+        await action.Should().ThrowAsync<KeyNotFoundException>();
 
         await _personRepository.Received(1).GetByUserIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>());
         await _userRepository.Received(0).DeleteAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>());

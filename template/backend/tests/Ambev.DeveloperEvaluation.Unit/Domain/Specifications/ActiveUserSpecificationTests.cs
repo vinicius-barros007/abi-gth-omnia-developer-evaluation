@@ -1,6 +1,6 @@
 using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
 using Ambev.DeveloperEvaluation.Domain.Specifications;
-using Ambev.DeveloperEvaluation.Unit.Domain.Specifications.TestData;
+using Ambev.DeveloperEvaluation.TestData.User;
 using FluentAssertions;
 using Xunit;
 
@@ -15,7 +15,8 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
         public void IsSatisfiedBy_ShouldValidateUserStatus(UserStatus status, bool expectedResult)
         {
             // Arrange
-            var user = ActiveUserSpecificationTestData.GenerateUser(status);
+            var user = UserTestData.GenerateValidUser();
+            user.Status = status;
             var specification = new ActiveUserSpecification();
 
             // Act

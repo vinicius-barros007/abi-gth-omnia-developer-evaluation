@@ -1,6 +1,7 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories;
 
@@ -32,6 +33,40 @@ public class UserRepository : IUserRepository
         return user;
     }
 
+    private IQueryable<User> GetQueryable(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        var users = _context.Users.AsQueryable();
+        if(predicate is not null)
+            users = users.Where(predicate);   
+
+        return from u in users.AsNoTracking()
+               join p in _context.Set<Person>().AsNoTracking()
+                   on u.Id equals p.UserId
+               select new User() 
+               { 
+                   Id = u.Id,
+                   Email = u.Email,
+                   Password = u.Password,
+                   Username = u.Username,
+                   Phone = u.Phone,
+                   CreatedAt = u.CreatedAt,
+                   UpdatedAt = u.UpdatedAt, 
+                   Status = u.Status,
+                   Role = u.Role,
+                   Person = new Person()
+                    {
+                        Id = p.Id,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        Address = p.Address,
+                        UserId = p.UserId,
+                        CreatedAt = p.CreatedAt,
+                        UpdatedAt = p.UpdatedAt
+                    }
+               };
+    }
+
+
     /// <summary>
     /// Retrieves a user by their unique identifier
     /// </summary>
@@ -40,7 +75,8 @@ public class UserRepository : IUserRepository
     /// <returns>The user if found, null otherwise</returns>
     public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.Users.FirstOrDefaultAsync(o=> o.Id == id, cancellationToken);
+        return await GetQueryable(u => u.Id == id, cancellationToken)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     /// <summary>
@@ -51,8 +87,8 @@ public class UserRepository : IUserRepository
     /// <returns>The user if found, null otherwise</returns>
     public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
-        return await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+        return await GetQueryable(u => u.Email == email, cancellationToken)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     /// <summary>
@@ -63,7 +99,7 @@ public class UserRepository : IUserRepository
     /// <returns>True if the user was deleted, false if not found</returns>
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var user = await GetByIdAsync(id, cancellationToken);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         if (user == null)
             return false;
 

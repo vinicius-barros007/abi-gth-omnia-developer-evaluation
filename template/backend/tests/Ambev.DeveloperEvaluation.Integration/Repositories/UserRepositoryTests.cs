@@ -1,5 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Integration.TestData;
-using Ambev.DeveloperEvaluation.ORM.Repositories;
+﻿using Ambev.DeveloperEvaluation.ORM.Repositories;
+using Ambev.DeveloperEvaluation.TestData.User;
 using FluentAssertions;
 using Xunit;
 

@@ -2,14 +2,14 @@ using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
 using Bogus;
 
-namespace Ambev.DeveloperEvaluation.Unit.Domain;
+namespace Ambev.DeveloperEvaluation.TestData.User;
 
 /// <summary>
 /// Provides methods for generating test data using the Bogus library.
 /// This class centralizes all test data generation to ensure consistency
 /// across test cases and provide both valid and invalid data scenarios.
 /// </summary>
-public static class CreateUserHandlerTestData
+public static class CreateUserCommandTestData
 {
     /// <summary>
     /// Configures the Faker to generate valid User entities.
@@ -27,7 +27,7 @@ public static class CreateUserHandlerTestData
         .RuleFor(u => u.City, f => f.Address.City())
         .RuleFor(u => u.Street, f => f.Address.StreetName())
         .RuleFor(u => u.Number, f => f.Random.Int(1, 200))
-        .RuleFor(u => u.ZipCode, f => f.Address.ZipCode("00000-000"))
+        .RuleFor(u => u.ZipCode, f => f.Address.ZipCode("#####-###"))
         .RuleFor(u => u.Latitude, f => (decimal)f.Address.Latitude())
         .RuleFor(u => u.Longitude, f => (decimal)f.Address.Longitude())
         .RuleFor(u => u.Username, f => f.Internet.UserName())

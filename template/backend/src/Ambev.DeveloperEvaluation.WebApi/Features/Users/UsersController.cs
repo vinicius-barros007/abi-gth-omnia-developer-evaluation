@@ -72,20 +72,15 @@ public class UsersController : BaseController
     {
         var request = new GetUserRequest { Id = id };
         var validator = new GetUserRequestValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
         var command = _mapper.Map<GetUserCommand>(request.Id);
-        var response = await _mediator.Send(command, cancellationToken);
 
-        return Ok(new ApiResponseWithData<GetUserResponse>
-        {
-            Success = true,
-            Message = "User retrieved successfully",
-            Data = _mapper.Map<GetUserResponse>(response)
-        });
+        var response = await _mediator.Send(command, cancellationToken);
+        return Ok(
+            "User retrieved successfully",
+            _mapper.Map<GetUserResponse>(response)
+        );
     }
 
     /// <summary>

@@ -1,9 +1,9 @@
-﻿using Ambev.DeveloperEvaluation.Integration.TestData;
-using Ambev.DeveloperEvaluation.ORM.Repositories;
+﻿using Ambev.DeveloperEvaluation.ORM.Repositories;
+using Ambev.DeveloperEvaluation.TestData.User;
 using FluentAssertions;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Integration
+namespace Ambev.DeveloperEvaluation.Integration.Repositories
 {
     public class PersonRepositoryTests : RepositoryBaseTests
     {
@@ -21,7 +21,7 @@ namespace Ambev.DeveloperEvaluation.Integration
         {
             // Arrange
             var user = UserTestData.GenerateValidUser();
-            user.Person = UserTestData.GenerateValidPerson();
+            user.Person = PersonTestData.GenerateValidPerson();
 
             user = await _userRepository.CreateAsync(user);
             user.Person.UserId = user.Id;
@@ -30,7 +30,7 @@ namespace Ambev.DeveloperEvaluation.Integration
             var action = async () =>
             {
                 await _repository.CreateAsync(user.Person);
-                await _unitOfWork.SaveChangesAsync();   
+                await _unitOfWork.SaveChangesAsync();
             };
 
             // Assert
@@ -42,7 +42,7 @@ namespace Ambev.DeveloperEvaluation.Integration
         {
             // Arrange
             var user = UserTestData.GenerateValidUser();
-            user.Person = UserTestData.GenerateValidPerson();
+            user.Person = PersonTestData.GenerateValidPerson();
 
             user = await _userRepository.CreateAsync(user);
             user.Person.FirstName = default!;

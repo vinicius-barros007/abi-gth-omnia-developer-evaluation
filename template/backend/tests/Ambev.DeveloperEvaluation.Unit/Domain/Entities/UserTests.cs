@@ -1,6 +1,6 @@
 using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
 using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
-using Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
+using Ambev.DeveloperEvaluation.TestData.User;
 using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities;

@@ -1,5 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
-using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
+﻿using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
 using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;

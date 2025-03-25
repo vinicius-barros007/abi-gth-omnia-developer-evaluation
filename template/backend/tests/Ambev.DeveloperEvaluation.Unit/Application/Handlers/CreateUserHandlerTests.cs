@@ -2,13 +2,13 @@ using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
-using Ambev.DeveloperEvaluation.Unit.Domain;
+using Ambev.DeveloperEvaluation.TestData.User;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application;
+namespace Ambev.DeveloperEvaluation.Unit.Application.Handlers;
 
 public class CreateUserHandlerTests
 {
@@ -36,7 +36,7 @@ public class CreateUserHandlerTests
     public async Task Handle_ValidRequest_ReturnsSuccessResponse()
     {
         // Given
-        var command = CreateUserHandlerTestData.GenerateValidCommand();
+        var command = CreateUserCommandTestData.GenerateValidCommand();
         var user = new User
         {
             Id = Guid.NewGuid(),
@@ -78,7 +78,7 @@ public class CreateUserHandlerTests
     public async Task Handle_ValidRequest_HashesPassword()
     {
         // Given
-        var command = CreateUserHandlerTestData.GenerateValidCommand();
+        var command = CreateUserCommandTestData.GenerateValidCommand();
         var originalPassword = command.Password;
         const string hashedPassword = "h@shedPassw0rd";
         var user = new User

@@ -1,11 +1,11 @@
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
-using Ambev.DeveloperEvaluation.Unit.Application.TestData;
+using Ambev.DeveloperEvaluation.TestData.User;
 using AutoMapper;
 using FluentAssertions;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application;
+namespace Ambev.DeveloperEvaluation.Unit.Application.Mappers;
 
 public class CreateUserProfilerTests
 {
@@ -16,7 +16,6 @@ public class CreateUserProfilerTests
         config.AssertConfigurationIsValid();
     }
 
-
     [Fact(DisplayName = "Map CreateUserCommand to user is working properly")]
     public void Map_CreateUserCommand_To_User_ShouldSucceed()
     {
@@ -24,7 +23,7 @@ public class CreateUserProfilerTests
         var config = new MapperConfiguration(cfg => cfg.AddProfile<CreateUserProfile>());
         var mapper = config.CreateMapper();
 
-        var command = CreateUserTestData.GenerateValidCreateUserCommand();
+        var command = CreateUserCommandTestData.GenerateValidCommand();
 
         // Act 
         var user = mapper.Map<User>(command);
@@ -40,13 +39,13 @@ public class CreateUserProfilerTests
 
         var person = user.Person;
         person.Should().NotBeNull();
-        person.FirstName.Should().Be(command.FirstName);   
-        person.LastName.Should().Be(command.LastName); 
+        person.FirstName.Should().Be(command.FirstName);
+        person.LastName.Should().Be(command.LastName);
 
         var address = person.Address;
         address.Should().NotBeNull();
         address.City.Should().Be(command.City);
-        address.Street.Should().Be(command.Street); 
+        address.Street.Should().Be(command.Street);
         address.Number.Should().Be(command.Number);
         address.ZipCode.Should().Be(command.ZipCode);
 

@@ -1,10 +1,7 @@
-﻿using Ambev.DeveloperEvaluation.Common.Security;
-using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
-using Ambev.DeveloperEvaluation.Functional.Features.Users.TestData;
+﻿using Ambev.DeveloperEvaluation.Functional.Features.Users.TestData;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
 using FluentAssertions;
-using System.Dynamic;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;

@@ -1,5 +1,5 @@
 using Ambev.DeveloperEvaluation.Domain.Validation.Identity;
-using Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
+using Ambev.DeveloperEvaluation.TestData.User;
 using FluentValidation.TestHelper;
 using Xunit;
 
@@ -24,7 +24,7 @@ public class PersonValidatorTests
     public void Given_ValidPerson_When_Validated_Then_ShouldNotHaveErrors()
     {
         // Arrange
-        var person = UserTestData.GenerateValidPerson();
+        var person = PersonTestData.GenerateValidPerson();
 
         // Act
         var result = _validator.TestValidate(person);
@@ -40,7 +40,7 @@ public class PersonValidatorTests
     public void Given_ValidPerson_And_Missing_Address_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var person = UserTestData.GenerateValidPerson();
+        var person = PersonTestData.GenerateValidPerson();
         person.Address = default!;
 
         // Act
@@ -58,7 +58,7 @@ public class PersonValidatorTests
     public void Given_EmptyFirstName_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var person = UserTestData.GenerateValidPerson();
+        var person = PersonTestData.GenerateValidPerson();
         person.FirstName = string.Empty;
 
         // Act
@@ -76,7 +76,7 @@ public class PersonValidatorTests
     public void Given_FirstName_LessThanTwoChars_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var person = UserTestData.GenerateValidPerson();
+        var person = PersonTestData.GenerateValidPerson();
         person.FirstName = "a";
 
         // Act
@@ -94,7 +94,7 @@ public class PersonValidatorTests
     public void Given_FirstName_ExceedMaxLength_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var person = UserTestData.GenerateInvalidPerson();
+        var person = PersonTestData.GenerateInvalidPerson();
 
         // Act
         var result = _validator.TestValidate(person);
@@ -111,7 +111,7 @@ public class PersonValidatorTests
     public void Given_EmptyLastName_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var person = UserTestData.GenerateValidPerson();
+        var person = PersonTestData.GenerateValidPerson();
         person.LastName = string.Empty;
 
         // Act
@@ -129,7 +129,7 @@ public class PersonValidatorTests
     public void Given_LastName_LessThanTwoChars_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var person = UserTestData.GenerateValidPerson();
+        var person = PersonTestData.GenerateValidPerson();
         person.LastName = "a";
 
         // Act
@@ -147,7 +147,7 @@ public class PersonValidatorTests
     public void Given_LastName_ExceedMaxLength_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var person = UserTestData.GenerateInvalidPerson();
+        var person = PersonTestData.GenerateInvalidPerson();
 
         // Act
         var result = _validator.TestValidate(person);

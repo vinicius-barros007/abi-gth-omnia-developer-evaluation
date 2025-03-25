@@ -40,12 +40,16 @@ public class PersonRepository : IPersonRepository
     /// <returns>The person if found, null otherwise</returns>
     public async Task<Person?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.Set<Person>().FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
+        return await _context.Set<Person>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
     }
 
     public async Task<Person?> GetByUserIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.Set<Person>().FirstOrDefaultAsync(o => o.UserId == id, cancellationToken);
+        return await _context.Set<Person>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(o => o.UserId == id, cancellationToken);
     }
 
     /// <summary>
@@ -56,7 +60,7 @@ public class PersonRepository : IPersonRepository
     /// <returns>True if the person was deleted, false if not found</returns>
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var person = await GetByIdAsync(id, cancellationToken);
+        var person = await _context.Set<Person>().FirstOrDefaultAsync(u => u.Id == id);
         if (person == null)
             return false;
 

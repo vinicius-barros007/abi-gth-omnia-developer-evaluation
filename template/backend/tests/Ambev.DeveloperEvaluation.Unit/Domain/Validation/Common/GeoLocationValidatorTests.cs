@@ -1,5 +1,5 @@
 using Ambev.DeveloperEvaluation.Domain.Validation.Common;
-using Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
+using Ambev.DeveloperEvaluation.TestData.User;
 using FluentValidation.TestHelper;
 using Xunit;
 
@@ -24,7 +24,7 @@ public class GeoLocationValidatorTests
     public void Given_ValidGeoLocation_When_Validated_Then_ShouldNotHaveErrors()
     {
         // Arrange
-        var geo = UserTestData.GenerateValidGeoLocation();
+        var geo = PersonTestData.GenerateValidGeoLocation();
 
         // Act
         var result = _validator.TestValidate(geo);
@@ -41,7 +41,7 @@ public class GeoLocationValidatorTests
     public void Given_InvalidLatitude_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var geo = UserTestData.GenerateInvalidGeoLocation();
+        var geo = PersonTestData.GenerateInvalidGeoLocation();
 
         // Act
         var result = _validator.TestValidate(geo);
@@ -58,7 +58,7 @@ public class GeoLocationValidatorTests
     public void Given_InvalidLongitude_When_Validated_Then_ShouldHaveError()
     {
         // Arrange
-        var geo = UserTestData.GenerateInvalidGeoLocation();
+        var geo = PersonTestData.GenerateInvalidGeoLocation();
 
         // Act
         var result = _validator.TestValidate(geo);

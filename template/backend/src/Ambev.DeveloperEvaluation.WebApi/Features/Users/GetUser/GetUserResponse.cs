@@ -1,4 +1,5 @@
-using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
 
@@ -13,9 +14,9 @@ public class GetUserResponse
     public Guid Id { get; set; }
 
     /// <summary>
-    /// The user's full name
+    /// The user's username
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
 
     /// <summary>
     /// The user's email address
@@ -36,4 +37,14 @@ public class GetUserResponse
     /// The current status of the user
     /// </summary>
     public UserStatus Status { get; set; }
+
+    /// <summary>
+    /// The user's name
+    /// </summary>
+    public PersonName Name { get; set; } = default!;
+
+    /// <summary>
+    /// The user's address
+    /// </summary>
+    public Address Address { get; set; } = default!;
 }
