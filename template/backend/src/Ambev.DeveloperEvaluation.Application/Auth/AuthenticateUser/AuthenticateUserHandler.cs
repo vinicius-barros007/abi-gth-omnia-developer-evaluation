@@ -1,6 +1,7 @@
 using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Domain.Specifications;
+using AutoMapper;
 using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Auth.AuthenticateUser
@@ -8,15 +9,18 @@ namespace Ambev.DeveloperEvaluation.Application.Auth.AuthenticateUser
     public class AuthenticateUserHandler : IRequestHandler<AuthenticateUserCommand, AuthenticateUserResult>
     {
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
         public AuthenticateUserHandler(
             IUserRepository userRepository,
+            IMapper mapper,
             IPasswordHasher passwordHasher,
             IJwtTokenGenerator jwtTokenGenerator)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
             _passwordHasher = passwordHasher;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
@@ -36,15 +40,10 @@ namespace Ambev.DeveloperEvaluation.Application.Auth.AuthenticateUser
                 throw new UnauthorizedAccessException("User is not active");
             }
 
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var result = _mapper.Map<AuthenticateUserResult>(user);
+            result.Token = _jwtTokenGenerator.GenerateToken(user);
 
-            return new AuthenticateUserResult
-            {
-                Token = token,
-                Email = user.Email,
-                Name = user.Username,
-                Role = user.Role.ToString()
-            };
+            return result;
         }
     }
 }

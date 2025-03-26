@@ -1,6 +1,6 @@
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
-using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
 using Bogus;
+using Ambev.DeveloperEvaluation.TestData.Extensions;
 
 namespace Ambev.DeveloperEvaluation.TestData.User;
 
@@ -21,21 +21,21 @@ public static class CreateUserCommandTestData
     /// - Status (Active or Suspended)
     /// - Role (Customer or Admin)
     /// </summary>
-    private static readonly Faker<CreateUserCommand> createUserHandlerFaker = new Faker<CreateUserCommand>()
+    private static readonly Faker<CreateUserCommand> createUserCommandFaker = new Faker<CreateUserCommand>()
         .RuleFor(u => u.FirstName, f => f.Name.FirstName())
         .RuleFor(u => u.LastName, f => f.Name.LastName())
         .RuleFor(u => u.City, f => f.Address.City())
         .RuleFor(u => u.Street, f => f.Address.StreetName())
         .RuleFor(u => u.Number, f => f.Random.Int(1, 200))
-        .RuleFor(u => u.ZipCode, f => f.Address.ZipCode("#####-###"))
+        .RuleFor(u => u.ZipCode, f => f.GenerateBrazilianZipCode())
         .RuleFor(u => u.Latitude, f => (decimal)f.Address.Latitude())
         .RuleFor(u => u.Longitude, f => (decimal)f.Address.Longitude())
         .RuleFor(u => u.Username, f => f.Internet.UserName())
         .RuleFor(u => u.Password, f => $"Test@{f.Random.Number(100, 999)}")
         .RuleFor(u => u.Email, f => f.Internet.Email())
-        .RuleFor(u => u.Phone, f => $"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}")
-        .RuleFor(u => u.Status, f => f.PickRandom(UserStatus.Active, UserStatus.Suspended))
-        .RuleFor(u => u.Role, f => f.PickRandom(UserRole.Customer, UserRole.Admin));
+        .RuleFor(u => u.Phone, f => f.GenerateBrazilianPhoneNumber())
+        .RuleFor(u => u.Status, f => f.GenerateRandomUserStatus())
+        .RuleFor(u => u.Role, f => f.GenerateRandomUserRole());
 
     /// <summary>
     /// Generates a valid User entity with randomized data.
@@ -45,6 +45,6 @@ public static class CreateUserCommandTestData
     /// <returns>A valid User entity with randomly generated data.</returns>
     public static CreateUserCommand GenerateValidCommand()
     {
-        return createUserHandlerFaker.Generate();
+        return createUserCommandFaker.Generate();
     }
 }

@@ -14,7 +14,9 @@ public sealed class AuthenticateUserProfile : Profile
     public AuthenticateUserProfile()
     {
         CreateMap<User, AuthenticateUserResult>()
-            .ForMember(dest => dest.Token, opt => opt.Ignore())
-            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()));
+            .ForMember(destination => destination.Token, opt => opt.Ignore())
+            .ForMember(destination => destination.Role, opt => opt.MapFrom(src => src.Role.ToString()))
+            .ForMember(destination => destination.FirstName, opt => opt.MapFrom(src => src.Person.FirstName))
+            .ForMember(destination => destination.LastName, opt => opt.MapFrom(src => src.Person.LastName));
     }
 }
