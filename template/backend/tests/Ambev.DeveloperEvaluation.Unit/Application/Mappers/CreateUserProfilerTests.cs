@@ -1,6 +1,6 @@
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
-using Ambev.DeveloperEvaluation.TestData.User;
+using Ambev.DeveloperEvaluation.TestData.Users;
 using AutoMapper;
 using FluentAssertions;
 using Xunit;

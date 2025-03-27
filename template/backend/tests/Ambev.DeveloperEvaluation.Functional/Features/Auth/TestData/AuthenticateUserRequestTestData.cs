@@ -1,8 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
-using Ambev.DeveloperEvaluation.Domain.ValueObjects;
-using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUser;
-using Ambev.DeveloperEvaluation.WebApi.Features.Users;
-using Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
+﻿using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUser;
 using Bogus;
 
 namespace Ambev.DeveloperEvaluation.Functional.Features.Users.TestData

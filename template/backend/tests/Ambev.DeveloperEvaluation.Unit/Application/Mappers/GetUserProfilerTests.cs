@@ -1,5 +1,5 @@
 using Ambev.DeveloperEvaluation.Application.Users.GetUser;
-using Ambev.DeveloperEvaluation.TestData.User;
+using Ambev.DeveloperEvaluation.TestData.Users;
 using AutoMapper;
 using FluentAssertions;
 using Xunit;

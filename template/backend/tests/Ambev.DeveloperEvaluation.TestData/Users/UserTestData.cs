@@ -1,7 +1,7 @@
 using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
 using Bogus;
 
-namespace Ambev.DeveloperEvaluation.TestData.User;
+namespace Ambev.DeveloperEvaluation.TestData.Users;
 
 /// <summary>
 /// Provides methods for generating test data using the Bogus library.
@@ -10,18 +10,18 @@ namespace Ambev.DeveloperEvaluation.TestData.User;
 /// </summary>
 public static class UserTestData
 {
-    private static readonly Faker<Domain.Entities.Identity.User> UserFaker = new Faker<Domain.Entities.Identity.User>()
-        .RuleFor(u => u.Person, PersonTestData.GenerateValidPerson())
-        .RuleFor(u => u.Username, f => f.Internet.UserName())
-        .RuleFor(u => u.Password, f => $"Test@{f.Random.Number(100, 999)}")
-        .RuleFor(u => u.Email, f => f.Internet.Email())
-        .RuleFor(u => u.Phone, f => $"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}")
-        .RuleFor(u => u.Status, f => f.PickRandom(UserStatus.Active, UserStatus.Suspended))
-        .RuleFor(u => u.Role, f => f.PickRandom(UserRole.Customer, UserRole.Admin));
-
     public static Domain.Entities.Identity.User GenerateValidUser()
     {
-        return UserFaker.Generate();
+        Faker<Domain.Entities.Identity.User> faker = new Faker<Domain.Entities.Identity.User>()
+            .RuleFor(u => u.Person, PersonTestData.GenerateValidPerson())
+            .RuleFor(u => u.Username, f => f.Internet.UserName())
+            .RuleFor(u => u.Password, f => $"Test@{f.Random.Number(100, 999)}")
+            .RuleFor(u => u.Email, f => f.Internet.Email())
+            .RuleFor(u => u.Phone, f => $"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}")
+            .RuleFor(u => u.Status, f => f.PickRandom(UserStatus.Active, UserStatus.Suspended))
+            .RuleFor(u => u.Role, f => f.PickRandom(UserRole.Customer, UserRole.Admin));
+
+        return faker.Generate();
     }
 
     /// <summary>

@@ -22,7 +22,101 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Person", b =>
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Catalog.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Product", (string)null);
+                });
+
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Catalog.ProductCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(70)
+                        .HasColumnType("character varying(70)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductCategory", (string)null);
+                });
+
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Catalog.ProductRating", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Rate")
+                        .HasColumnType("decimal(4,2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("ProductRating", (string)null);
+                });
+
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Identity.Person", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,10 +144,13 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Person", (string)null);
                 });
 
-            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.User", b =>
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Identity.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -101,8 +198,36 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Person", b =>
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Catalog.Product", b =>
                 {
+                    b.HasOne("Ambev.DeveloperEvaluation.Domain.Entities.Catalog.ProductCategory", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Catalog.ProductRating", b =>
+                {
+                    b.HasOne("Ambev.DeveloperEvaluation.Domain.Entities.Catalog.Product", "Product")
+                        .WithOne("Rating")
+                        .HasForeignKey("Ambev.DeveloperEvaluation.Domain.Entities.Catalog.ProductRating", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Identity.Person", b =>
+                {
+                    b.HasOne("Ambev.DeveloperEvaluation.Domain.Entities.Identity.User", "User")
+                        .WithOne("Person")
+                        .HasForeignKey("Ambev.DeveloperEvaluation.Domain.Entities.Identity.Person", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("Ambev.DeveloperEvaluation.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("PersonId")
@@ -128,7 +253,8 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                                 .IsRequired()
                                 .HasMaxLength(10)
                                 .HasColumnType("character varying(10)")
-                                .HasColumnName("ZipCode");
+                                .HasColumnName("ZipCode")
+                                .HasAnnotation("Relational:JsonPropertyName", "zipcode");
 
                             b1.HasKey("PersonId");
 
@@ -142,21 +268,23 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                                     b2.Property<Guid>("AddressPersonId")
                                         .HasColumnType("uuid");
 
-                                    b2.Property<string>("Latitude")
-                                        .IsRequired()
+                                    b2.Property<decimal>("Latitude")
                                         .HasMaxLength(20)
-                                        .HasColumnType("character varying(20)")
-                                        .HasColumnName("Latitude");
+                                        .HasColumnType("numeric")
+                                        .HasColumnName("Latitude")
+                                        .HasAnnotation("Relational:JsonPropertyName", "lat");
 
-                                    b2.Property<string>("Longitude")
-                                        .IsRequired()
+                                    b2.Property<decimal>("Longitude")
                                         .HasMaxLength(20)
-                                        .HasColumnType("character varying(20)")
-                                        .HasColumnName("Longitude");
+                                        .HasColumnType("numeric")
+                                        .HasColumnName("Longitude")
+                                        .HasAnnotation("Relational:JsonPropertyName", "long");
 
                                     b2.HasKey("AddressPersonId");
 
                                     b2.ToTable("Person");
+
+                                    b2.HasAnnotation("Relational:JsonPropertyName", "geolocation");
 
                                     b2.WithOwner()
                                         .HasForeignKey("AddressPersonId");
@@ -167,6 +295,25 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                         });
 
                     b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Catalog.Product", b =>
+                {
+                    b.Navigation("Rating")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Catalog.ProductCategory", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Identity.User", b =>
+                {
+                    b.Navigation("Person")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

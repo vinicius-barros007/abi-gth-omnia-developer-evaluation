@@ -1,19 +1,11 @@
 ﻿using Ambev.DeveloperEvaluation.Functional.Features.Users.TestData;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
-using Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUser;
-using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
-using Ambev.DeveloperEvaluation.Common.Security;
 
 namespace Ambev.DeveloperEvaluation.Functional.Features.Auth
 {
@@ -31,6 +23,8 @@ namespace Ambev.DeveloperEvaluation.Functional.Features.Auth
         {
             // Arrange
             var user = CreateUserRequestTestData.GenerateValidRequest();
+            user.Status = Domain.Enums.Identity.UserStatus.Active;
+
             var request = new AuthenticateUserRequest()
             { 
                 Email = user.Email,

@@ -9,6 +9,7 @@ public class DefaultDatabaseTestContext : DefaultContext
     public DefaultDatabaseTestContext() : base(
         new DbContextOptionsBuilder<DefaultContext>()
         .UseInMemoryDatabase(nameof(DefaultDatabaseTestContext))
+        .EnableSensitiveDataLogging()
         .Options)
     {
     }

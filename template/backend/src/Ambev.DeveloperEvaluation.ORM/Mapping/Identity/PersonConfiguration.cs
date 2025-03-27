@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Ambev.DeveloperEvaluation.ORM.Mapping;
+namespace Ambev.DeveloperEvaluation.ORM.Mapping.Identity;
 
 public class PersonConfiguration : IEntityTypeConfiguration<Person>
 {
@@ -13,10 +13,12 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
 
         builder.Property(p => p.Id)
             .HasColumnType("uuid")
-            .HasDefaultValueSql("gen_random_uuid()");
+            .HasDefaultValueSql("gen_random_uuid()")
+            .ValueGeneratedOnAdd();
 
         builder.Property(p => p.UserId)
-            .IsRequired();
+            .IsRequired()
+            .HasColumnType("uuid");
 
         builder.Property(p => p.FirstName)
             .IsRequired()
@@ -60,13 +62,11 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
 
                 g.Property(g => g.Latitude)
                     .HasColumnName("Latitude")
-                    .IsRequired()
-                    .HasMaxLength(20);
+                    .IsRequired();
 
                 g.Property(g => g.Longitude)
                     .HasColumnName("Longitude")
-                    .IsRequired()
-                    .HasMaxLength(20);
+                    .IsRequired();
             });
         });
     }

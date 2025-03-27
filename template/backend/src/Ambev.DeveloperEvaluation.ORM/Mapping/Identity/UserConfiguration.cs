@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Ambev.DeveloperEvaluation.ORM.Mapping;
+namespace Ambev.DeveloperEvaluation.ORM.Mapping.Identity;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
@@ -13,7 +13,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.Id)
             .HasColumnType("uuid")
-            .HasDefaultValueSql("gen_random_uuid()");
+            .HasDefaultValueSql("gen_random_uuid()")
+            .ValueGeneratedOnAdd();
 
         builder.Property(u => u.Username)
             .IsRequired()

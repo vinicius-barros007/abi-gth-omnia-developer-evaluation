@@ -33,7 +33,7 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    private IQueryable<User> GetQueryable(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken = default)
+    private IQueryable<User> GetQueryable(Expression<Func<User, bool>> predicate)
     {
         var users = _context.Users.AsQueryable();
         if(predicate is not null)
@@ -75,7 +75,7 @@ public class UserRepository : IUserRepository
     /// <returns>The user if found, null otherwise</returns>
     public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await GetQueryable(u => u.Id == id, cancellationToken)
+        return await GetQueryable(u => u.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -87,7 +87,7 @@ public class UserRepository : IUserRepository
     /// <returns>The user if found, null otherwise</returns>
     public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
-        return await GetQueryable(u => u.Email == email, cancellationToken)
+        return await GetQueryable(u => u.Email == email)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -99,7 +99,7 @@ public class UserRepository : IUserRepository
     /// <returns>True if the user was deleted, false if not found</returns>
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
         if (user == null)
             return false;
 
