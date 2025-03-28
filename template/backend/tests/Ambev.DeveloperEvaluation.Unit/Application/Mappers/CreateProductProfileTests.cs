@@ -1,6 +1,6 @@
 using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
-using Ambev.DeveloperEvaluation.Domain.Entities.Catalog;
+using Ambev.DeveloperEvaluation.Domain.Entities.Products;
 using Ambev.DeveloperEvaluation.TestData.Products;
 using AutoMapper;
 using FluentAssertions;
@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application.Mappers;
 
-public class CreateProductProfilerTests
+public class CreateProductProfileTests
 {
     [Fact(DisplayName = "Assert CreateProductProfile mapper is valid")]
     public void AutoMapper_Configuration_IsValid()

@@ -25,5 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Ambev.DeveloperEvaluation.WebApi\Ambev.DeveloperEvaluation.WebApi.csproj" />
+    <ProjectReference Include="..\Ambev.DeveloperEvaluation.TestData\Ambev.DeveloperEvaluation.TestData.csproj" />
   </ItemGroup>
 </Project>

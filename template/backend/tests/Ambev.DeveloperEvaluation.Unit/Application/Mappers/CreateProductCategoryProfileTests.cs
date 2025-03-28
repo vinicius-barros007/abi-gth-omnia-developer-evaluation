@@ -1,5 +1,5 @@
 using Ambev.DeveloperEvaluation.Application.ProductCategories.CreateProductCategory;
-using Ambev.DeveloperEvaluation.Domain.Entities.Catalog;
+using Ambev.DeveloperEvaluation.Domain.Entities.Products;
 using Ambev.DeveloperEvaluation.TestData.Products;
 using AutoMapper;
 using FluentAssertions;
@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application.Mappers;
 
-public class CreateProductCategoryProfilerTests
+public class CreateProductCategoryProfileTests
 {
     [Fact(DisplayName = "Assert CreateProductCategoryProfile mapper is valid")]
     public void AutoMapper_Configuration_IsValid()

@@ -1,5 +1,5 @@
 using Ambev.DeveloperEvaluation.Application.ProductCategories.CreateProductCategory;
-using Ambev.DeveloperEvaluation.Domain.Entities.Catalog;
+using Ambev.DeveloperEvaluation.Domain.Entities.Products;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.TestData.Products;
 using AutoMapper;

@@ -1,4 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Entities.Catalog;
+﻿using Ambev.DeveloperEvaluation.Domain.Entities.Products;
 using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.Domain.Validation.Products;

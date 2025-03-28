@@ -6,9 +6,9 @@ namespace Ambev.DeveloperEvaluation.TestData.Products;
 
 public static class CreateSaleCommandTestData
 {
-    public static IEnumerable<CreateSaleItem> GenerateValidSaleItem()
+    public static IEnumerable<CreateSaleItemCommand> GenerateValidSaleItem()
     {
-        var faker = new Faker<CreateSaleItem>()
+        var faker = new Faker<CreateSaleItemCommand>()
             .RuleFor(c => c.ProductId, Guid.NewGuid())
             .RuleFor(c => c.Quantity, f => f.Random.Int(1, 20));
 

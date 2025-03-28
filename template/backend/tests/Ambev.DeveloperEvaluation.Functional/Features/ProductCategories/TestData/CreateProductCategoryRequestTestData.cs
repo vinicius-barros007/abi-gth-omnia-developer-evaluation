@@ -5,9 +5,12 @@ namespace Ambev.DeveloperEvaluation.Functional.Features.ProductCategories.TestDa
 {
     internal static class CreateProductCategoryRequestTestData
     {
-        private static readonly Faker<CreateProductCategoryRequest> ProductCategoryFaker = new Faker<CreateProductCategoryRequest>()
-            .RuleFor(c => c.Description, f => f.Commerce.ProductMaterial());
+        public static CreateProductCategoryRequest GenerateValidRequest()
+        {
+            var faker = new Faker<CreateProductCategoryRequest>()
+                .RuleFor(c => c.Description, f => f.Commerce.ProductMaterial());
 
-        public static CreateProductCategoryRequest GenerateValidRequest() => ProductCategoryFaker.Generate();
+            return faker.Generate();
+        }
     }
 }

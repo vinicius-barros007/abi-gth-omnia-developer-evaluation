@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.ORM;
+using Ambev.DeveloperEvaluation.ORM.Interceptors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -20,9 +21,10 @@ namespace Ambev.DeveloperEvaluation.Functional
                 }
 
                 // Add a new in-memory database for testing
-                services.AddDbContext<DefaultContext>(options =>
-                {
-                    options.UseInMemoryDatabase("TestDatabase");
+                services.AddDbContext<DefaultContext>((serviceProvider, options) => {
+                    var interceptor = serviceProvider.GetRequiredService<PublishDomainEventsInterceptor>();
+                    options.UseInMemoryDatabase("TestDatabase")
+                        .AddInterceptors(interceptor); 
                 });
 
                 // Apply migrations and seed data

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application.Mappers;
 
-public class CreateUserProfilerTests
+public class CreateUserProfileTests
 {
     [Fact(DisplayName = "Assert create user profile mapper is valid")]
     public void AutoMapper_Configuration_IsValid()
