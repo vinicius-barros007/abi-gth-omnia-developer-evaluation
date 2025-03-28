@@ -60,6 +60,14 @@ public class Program
             var app = builder.Build();
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                using var context = scope.ServiceProvider.GetRequiredService<DefaultContext>();
+
+                if(context.Database.IsNpgsql())
+                    context.Database.Migrate();
+            }
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

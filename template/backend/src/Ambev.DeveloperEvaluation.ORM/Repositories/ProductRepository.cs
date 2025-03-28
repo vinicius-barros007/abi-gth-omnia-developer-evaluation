@@ -50,7 +50,6 @@ public class ProductRepository : IProductRepository
                    Category = category,
                    CategoryId = product.CategoryId,
                    Image = product.Image,
-                   //Rating = product.Rating,
                    Price = product.Price,
                    CreatedAt = product.CreatedAt,
                    UpdatedAt = product.UpdatedAt,

@@ -16,6 +16,7 @@ public class CreateSaleHandlerTests
 {
     private readonly ISaleRepository _saleRepository;
     private readonly ISaleItemRepository _saleItemRepository;
+    private readonly IProductRepository _productRepository;
     private readonly IDiscountService _discountService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -25,10 +26,11 @@ public class CreateSaleHandlerTests
     {
         _saleRepository = Substitute.For<ISaleRepository>();
         _saleItemRepository = Substitute.For<ISaleItemRepository>();
+        _productRepository = Substitute.For<IProductRepository>();
         _discountService = Substitute.For<IDiscountService>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
         _mapper = Substitute.For<IMapper>();
-        _handler = new CreateSaleHandler(_saleRepository, _saleItemRepository, _discountService, _unitOfWork, _mapper);
+        _handler = new CreateSaleHandler(_saleRepository, _productRepository, _saleItemRepository, _discountService, _unitOfWork, _mapper);
     }
 
     [Fact(DisplayName = "Given valid sale data When creating sale Then returns success response")]
@@ -58,6 +60,10 @@ public class CreateSaleHandlerTests
 
         _saleItemRepository.CreateAsync(Arg.Any<SaleItem>(), Arg.Any<CancellationToken>())
             .Returns(item);
+
+        var product = ProductTestData.GenerateValidProduct();
+        _productRepository.GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(product);
 
         // When
         var createSaleResult = await _handler.Handle(command, CancellationToken.None);

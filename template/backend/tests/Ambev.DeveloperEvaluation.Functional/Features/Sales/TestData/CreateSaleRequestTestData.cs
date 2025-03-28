@@ -19,7 +19,7 @@ namespace Ambev.DeveloperEvaluation.Functional.Features.Products.TestData
         {
             var faker = new Faker<CreateSaleCommand>()
                 .RuleFor(s => s.Items, GenerateValidSaleItem())
-                .RuleFor(s => s.SaleDate, f => f.Date.Past())
+                .RuleFor(s => s.SaleDate, f => DateOnly.FromDateTime(f.Date.Past()))
                 .RuleFor(s => s.Branch, BranchTestData.GenerateValidBranch())
                 .RuleFor(s => s.Customer, CustomerTestData.GenerateValidCustomer());
 
