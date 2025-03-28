@@ -12,7 +12,7 @@ public static class SaleTestData
         Faker<Sale> faker = new Faker<Sale>()
             .RuleFor(s => s.Items, SaleItemTestData.GenerateValidItem(5))
             .RuleFor(s => s.SaleNumber, f => f.Random.Long(1))
-            .RuleFor(s => s.SaleDate, f => f.Date.Past())
+            .RuleFor(s => s.SaleDate, f => DateOnly.FromDateTime(f.Date.Past()))
             .RuleFor(s => s.Branch, BranchTestData.GenerateValidBranch())
             .RuleFor(s => s.Customer, CustomerTestData.GenerateValidCustomer())
             .RuleFor(s => s.Status, f => f.GenerateRandomSaleStatus());

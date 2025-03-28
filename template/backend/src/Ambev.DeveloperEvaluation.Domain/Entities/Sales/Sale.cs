@@ -8,11 +8,17 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities.Sales;
 
 public class Sale : AggregateRoot
 {
-    public long SaleNumber { get; set; }
+    public Sale()
+    {
+        Id = Guid.NewGuid();
+        CreatedAt = DateTime.UtcNow;
+    }
 
-    public DateTime SaleDate { get; set; }
+    public long? SaleNumber { get; set; }
 
-    public List<SaleItem> Items { get; set; } = [];
+    public DateOnly SaleDate { get; set; }
+
+    public ICollection<SaleItem> Items { get; set; } = [];
 
     public Branch Branch { get; set; } = default!;
 

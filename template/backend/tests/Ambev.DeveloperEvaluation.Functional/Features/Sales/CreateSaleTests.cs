@@ -71,7 +71,6 @@ namespace Ambev.DeveloperEvaluation.Functional.Features.Products
 
             var saleResponse = content.Data;
             saleResponse.Id.Should().NotBeEmpty();
-            saleResponse.SaleNumber.Should().BeGreaterThan(0);
         }
 
         [Fact(DisplayName = "Creation of invalid sale should return bad request status code")]

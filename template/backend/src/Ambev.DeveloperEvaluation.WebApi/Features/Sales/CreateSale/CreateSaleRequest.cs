@@ -4,7 +4,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 
 public class CreateSaleRequest
 {
-    public DateTime SaleDate { get; set; }
+    public DateOnly SaleDate { get; set; }
 
     public Branch Branch { get; set; } = default!;
 

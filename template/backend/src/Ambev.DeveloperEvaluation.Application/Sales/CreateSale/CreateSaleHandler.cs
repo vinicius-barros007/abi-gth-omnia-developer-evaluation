@@ -11,12 +11,14 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
 {
     private readonly ISaleRepository _saleRepository;
     private readonly ISaleItemRepository _saleItemRepository;
+    private readonly IProductRepository _productItemRepository;
     private readonly IDiscountService _discountService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public CreateSaleHandler(
         ISaleRepository saleRepository,
+        IProductRepository productItemRepository,
         ISaleItemRepository saleItemRepository,
         IDiscountService discountService,
         IUnitOfWork unitOfWork,
@@ -24,7 +26,8 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
     )
     {
         _saleRepository = saleRepository;
-        _saleItemRepository = saleItemRepository; 
+        _saleItemRepository = saleItemRepository;
+        _productItemRepository = productItemRepository;
         _discountService = discountService;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
@@ -41,9 +44,13 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
             var saleItem = _mapper.Map<SaleItem>(item);
             saleItem.SaleId = createdSale.Id;
 
-            saleItem.Discount = _discountService.CalculateDiscount(saleItem);
-            sale.Validate();
+            var product = await _productItemRepository.GetByIdAsync(saleItem.ProductId, cancellationToken) ?? 
+                throw new KeyNotFoundException($"ProductId {saleItem.ProductId} doesn't exist.");
 
+            saleItem.UnitPrice = product.Price;
+            saleItem.Discount = _discountService.CalculateDiscount(saleItem);
+
+            sale.Validate();
             await _saleItemRepository.CreateAsync(saleItem, cancellationToken);
         }
 

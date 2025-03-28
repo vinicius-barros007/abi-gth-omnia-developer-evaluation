@@ -17,8 +17,9 @@ public class SaleConfiguration : IEntityTypeConfiguration<Sale>
             .ValueGeneratedOnAdd();
 
         builder.Property(s => s.SaleNumber)
-            .IsRequired()
-            .HasColumnType("bigserial");
+            .IsRequired() 
+            .HasDefaultValueSql("nextval('sale_seq')")
+            .ValueGeneratedOnAdd();
 
         builder.Property(s => s.SaleDate)
             .IsRequired();
@@ -63,7 +64,8 @@ public class SaleConfiguration : IEntityTypeConfiguration<Sale>
         builder.Property(u => u.UpdatedAt);
 
         builder.HasMany(s => s.Items)
-            .WithOne()
-            .HasForeignKey(si => si.SaleId);
+            .WithOne(si => si.Sale)
+            .HasForeignKey(si => si.SaleId)
+            .HasPrincipalKey(s => s.Id);
     }
 }

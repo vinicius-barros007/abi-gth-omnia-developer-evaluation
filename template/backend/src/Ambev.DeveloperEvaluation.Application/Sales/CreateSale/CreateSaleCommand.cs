@@ -5,7 +5,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 
 public class CreateSaleCommand : IRequest<CreateSaleResult>
 {
-    public DateTime SaleDate { get; set; }
+    public DateOnly SaleDate { get; set; }
 
     public Branch Branch { get; set; } = default!;
 

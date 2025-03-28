@@ -38,6 +38,7 @@ public class SaleItemConfiguration : IEntityTypeConfiguration<SaleItem>
 
         builder.HasOne(si => si.Sale)
             .WithMany(s => s.Items)
-            .HasForeignKey(si => si.SaleId);
+            .HasForeignKey(si => si.SaleId)
+            .HasPrincipalKey(s => s.Id);
     }
 }
