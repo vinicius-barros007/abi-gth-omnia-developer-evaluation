@@ -1,8 +1,6 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Entities.Catalog;
-using Ambev.DeveloperEvaluation.Domain.Entities.Identity;
+﻿using Ambev.DeveloperEvaluation.Domain.Entities.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Ambev.DeveloperEvaluation.ORM.Mapping.Products;
 
@@ -16,7 +14,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Id)
             .HasColumnType("uuid")
             .HasDefaultValueSql("gen_random_uuid()")
-            .ValueGeneratedOnAdd(); 
+            .ValueGeneratedOnAdd();
 
         builder.Property(p => p.Title)
             .IsRequired()

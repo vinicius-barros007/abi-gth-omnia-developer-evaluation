@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ambev.DeveloperEvaluation.ORM.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    [Migration("20250322215010_UserAdditionalInfo")]
+    [Migration("20250328121352_UserAdditionalInfo")]
     partial class UserAdditionalInfo
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Person", b =>
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Identity.Person", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,10 +53,13 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Person", (string)null);
                 });
 
-            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.User", b =>
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Identity.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,8 +107,14 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Person", b =>
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Identity.Person", b =>
                 {
+                    b.HasOne("Ambev.DeveloperEvaluation.Domain.Entities.Identity.User", "User")
+                        .WithOne("Person")
+                        .HasForeignKey("Ambev.DeveloperEvaluation.Domain.Entities.Identity.Person", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("Ambev.DeveloperEvaluation.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("PersonId")
@@ -131,7 +140,8 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                                 .IsRequired()
                                 .HasMaxLength(10)
                                 .HasColumnType("character varying(10)")
-                                .HasColumnName("ZipCode");
+                                .HasColumnName("ZipCode")
+                                .HasAnnotation("Relational:JsonPropertyName", "zipcode");
 
                             b1.HasKey("PersonId");
 
@@ -145,21 +155,21 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                                     b2.Property<Guid>("AddressPersonId")
                                         .HasColumnType("uuid");
 
-                                    b2.Property<string>("Latitude")
-                                        .IsRequired()
-                                        .HasMaxLength(20)
-                                        .HasColumnType("character varying(20)")
-                                        .HasColumnName("Latitude");
+                                    b2.Property<decimal>("Latitude")
+                                        .HasColumnType("decimal(10,7)")
+                                        .HasColumnName("Latitude")
+                                        .HasAnnotation("Relational:JsonPropertyName", "lat");
 
-                                    b2.Property<string>("Longitude")
-                                        .IsRequired()
-                                        .HasMaxLength(20)
-                                        .HasColumnType("character varying(20)")
-                                        .HasColumnName("Longitude");
+                                    b2.Property<decimal>("Longitude")
+                                        .HasColumnType("decimal(10,7)")
+                                        .HasColumnName("Longitude")
+                                        .HasAnnotation("Relational:JsonPropertyName", "long");
 
                                     b2.HasKey("AddressPersonId");
 
                                     b2.ToTable("Person");
+
+                                    b2.HasAnnotation("Relational:JsonPropertyName", "geolocation");
 
                                     b2.WithOwner()
                                         .HasForeignKey("AddressPersonId");
@@ -170,6 +180,14 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                         });
 
                     b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Identity.User", b =>
+                {
+                    b.Navigation("Person")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

@@ -1,4 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Entities.Catalog;
+﻿using Ambev.DeveloperEvaluation.Domain.Entities.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -22,7 +22,7 @@ public class ProductRatingConfiguration : IEntityTypeConfiguration<ProductRating
 
         builder.Property(b => b.Rate)
             .IsRequired()
-            .HasColumnType("decimal(4,2)");
+            .HasColumnType("decimal(5,2)");
 
         builder.Property(b => b.Count)
             .IsRequired();

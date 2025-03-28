@@ -62,11 +62,11 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
 
                 g.Property(g => g.Latitude)
                     .HasColumnName("Latitude")
-                    .IsRequired();
+                    .HasColumnType("decimal(10,7)");
 
                 g.Property(g => g.Longitude)
                     .HasColumnName("Longitude")
-                    .IsRequired();
+                    .HasColumnType("decimal(10,7)");
             });
         });
     }

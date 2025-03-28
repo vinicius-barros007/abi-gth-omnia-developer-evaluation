@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -11,32 +10,12 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<decimal>(
-                name: "Longitude",
-                table: "Person",
-                type: "numeric",
-                maxLength: 20,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(20)",
-                oldMaxLength: 20);
-
-            migrationBuilder.AlterColumn<decimal>(
-                name: "Latitude",
-                table: "Person",
-                type: "numeric",
-                maxLength: 20,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(20)",
-                oldMaxLength: 20);
-
             migrationBuilder.CreateTable(
                 name: "ProductCategory",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
-                    Description = table.Column<string>(type: "character varying(70)", maxLength: 70, nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -49,12 +28,12 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                 name: "Product",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
-                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    Image = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Image = table.Column<string>(type: "text", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -75,7 +54,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Rate = table.Column<decimal>(type: "numeric(4,2)", nullable: false),
+                    Rate = table.Column<decimal>(type: "numeric(5,2)", nullable: false),
                     Count = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -92,12 +71,6 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_UserId",
-                table: "Person",
-                column: "UserId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Product_CategoryId",
                 table: "Product",
                 column: "CategoryId");
@@ -107,23 +80,11 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                 table: "ProductRating",
                 column: "ProductId",
                 unique: true);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Person_Users_UserId",
-                table: "Person",
-                column: "UserId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Person_Users_UserId",
-                table: "Person");
-
             migrationBuilder.DropTable(
                 name: "ProductRating");
 
@@ -132,30 +93,6 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductCategory");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Person_UserId",
-                table: "Person");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Longitude",
-                table: "Person",
-                type: "character varying(20)",
-                maxLength: 20,
-                nullable: false,
-                oldClrType: typeof(decimal),
-                oldType: "numeric",
-                oldMaxLength: 20);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Latitude",
-                table: "Person",
-                type: "character varying(20)",
-                maxLength: 20,
-                nullable: false,
-                oldClrType: typeof(decimal),
-                oldType: "numeric",
-                oldMaxLength: 20);
         }
     }
 }

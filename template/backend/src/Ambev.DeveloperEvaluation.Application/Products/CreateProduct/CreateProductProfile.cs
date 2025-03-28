@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
-using Ambev.DeveloperEvaluation.Domain.Entities.Catalog;
+using Ambev.DeveloperEvaluation.Domain.Entities.Products;
 
 namespace Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 

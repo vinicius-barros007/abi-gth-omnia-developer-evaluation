@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Enums.Identity;
+using Ambev.DeveloperEvaluation.Domain.Enums.Sales;
 using Bogus;
 
 namespace Ambev.DeveloperEvaluation.TestData.Extensions
@@ -16,5 +17,8 @@ namespace Ambev.DeveloperEvaluation.TestData.Extensions
 
         public static UserRole GenerateRandomUserRole(this Faker faker)
             => faker.PickRandom(UserRole.Customer, UserRole.Admin);
+
+        public static SaleStatus GenerateRandomSaleStatus(this Faker faker)
+            => faker.PickRandom(SaleStatus.Pending, SaleStatus.Cancelled);
     }
 }

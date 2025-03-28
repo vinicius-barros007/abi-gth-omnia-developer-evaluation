@@ -1,4 +1,4 @@
-using Ambev.DeveloperEvaluation.Domain.Entities.Catalog;
+using Ambev.DeveloperEvaluation.Domain.Entities.Products;
 using Bogus;
 
 namespace Ambev.DeveloperEvaluation.TestData.Products;

@@ -1,6 +1,6 @@
 using Ambev.DeveloperEvaluation.Domain.Common;
 
-namespace Ambev.DeveloperEvaluation.Domain.Entities.Catalog;
+namespace Ambev.DeveloperEvaluation.Domain.Entities.Products;
 
 public class ProductRating : BaseEntity
 {
